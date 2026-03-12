@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In - Leafify</title>
+    <title>Sign In - AyuMed</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
         <div class="text-center mb-8">
             <a href="/" class="flex items-center justify-center gap-3 mb-2">
                 <img src="/static/images/logo.png" alt="Leafify Logo" class="h-8 w-auto">
-                <h1 class="text-3xl font-bold text-emerald-800">Leafify</h1>
+                <h1 class="text-3xl font-bold text-emerald-800">AyuMed</h1>
             </a>
             <p class="text-emerald-700">Welcome back! Sign in to continue.</p>
         </div>
@@ -43,32 +43,84 @@
         </p>
     </div>
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    const firebaseConfig = { apiKey: "AIzaSyAvacDGiWm1vTF5uBBzfZGO_u_H3JcmQvk", authDomain: "leafify-72dda.firebaseapp.com", projectId: "leafify-72dda", storageBucket: "leafify-72dda.firebasestorage.app", messagingSenderId: "1:713980236597:web:c94a3324b116c68c80327c", appId: "G-HK389N2CGL" };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const signinForm = document.getElementById('signin-form');
-    const errorMessage = document.getElementById('error-message');
-    signinForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        errorMessage.textContent = '';
-        signInWithEmailAndPassword(auth, signinForm.email.value, signinForm.password.value)
-            .then(userCredential => userCredential.user.getIdToken())
-            .then(idToken => fetch('/session-login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ idToken: idToken }),
-            }))
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to create server session.');
-                window.location.href = '/dashboard';
-            })
-            .catch(error => {
-                console.error('Sign in process error:', error);
-                errorMessage.textContent = 'Invalid email or password.';
-            });
-    });
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAvacDGiWm1vTF5uBBzfZGO_u_H3JcmQvk",
+//   authDomain: "leafify-72dda.firebaseapp.com",
+//   "project_id": "leaf-4eb29",
+//   storageBucket: "leafify-72dda.appspot.com",
+//   messagingSenderId: "713980236597",
+//   appId: "1:713980236597:web:c94a3324b116c68c80327c"
+// };
+const firebaseConfig = {
+  apiKey: "AIzaSyBGiHcZqg0AHntQ5jNaW755mvZFtMrdw8Q",
+  authDomain: "leaf-4eb29.firebaseapp.com",
+  projectId: "leaf-4eb29",
+  storageBucket: "leaf-4eb29.firebasestorage.app",
+  messagingSenderId: "229613624118",
+  appId: "1:229613624118:web:6d9a676ffd3bd4f015b197",
+  measurementId: "G-Y0KQHN7YRV"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const signinForm = document.getElementById("signin-form");
+const errorMessage = document.getElementById("error-message");
+
+signinForm.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+    errorMessage.textContent = "";
+
+    try {
+
+        const email = signinForm.email.value;
+        const password = signinForm.password.value;
+
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+        const idToken = await userCredential.user.getIdToken();
+
+        const response = await fetch("/session-login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ idToken: idToken })
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.error || "Session login failed");
+        }
+
+        window.location.href = "/dashboard";
+
+    } catch (error) {
+
+        console.error("Signin error:", error);
+
+        if (error.code === "auth/user-not-found") {
+            errorMessage.textContent = "User not found.";
+        }
+        else if (error.code === "auth/wrong-password") {
+            errorMessage.textContent = "Incorrect password.";
+        }
+        else if (error.code === "auth/invalid-email") {
+            errorMessage.textContent = "Invalid email.";
+        }
+        else {
+            errorMessage.textContent = "Login failed. Please try again.";
+        }
+
+    }
+
+});
+
 </script>
 </body>
 </html>

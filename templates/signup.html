@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - Leafify</title>
+    <title>Sign Up - AyuMed</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
                  <img src="/static/images/logo.png" alt="Leafify Logo" class="h-8 w-auto">
                  <h1 class="text-3xl font-bold text-emerald-800">Create Account</h1>
             </a>
-            <p class="text-emerald-700">Join Leafify to start identifying.</p>
+            <p class="text-emerald-700">Join AyuMed to start identifying.</p>
         </div>
         <form id="signup-form" class="space-y-6">
             <div>
@@ -44,36 +44,86 @@
         </p>
     </div>
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    const firebaseConfig = { apiKey: "AIzaSyAvacDGiWm1vTF5uBBzfZGO_u_H3JcmQvk", authDomain: "leafify-72dda.firebaseapp.com", projectId: "leafify-72dda", storageBucket: "leafify-72dda.firebasestorage.app", messagingSenderId: "1:713980236597:web:c94a3324b116c68c80327c", appId: "G-HK389N2CGL" };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const signupForm = document.getElementById('signup-form');
-    const errorMessage = document.getElementById('error-message');
-    signupForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        errorMessage.textContent = '';
-        createUserWithEmailAndPassword(auth, signupForm.email.value, signupForm.password.value)
-            .then(userCredential => userCredential.user.getIdToken())
-            .then(idToken => fetch('/session-login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ idToken: idToken }),
-            }))
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to create server session.');
-                window.location.href = '/dashboard';
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+// const firebaseConfig = {
+//   apiKey: "AIzaSyAvacDGiWm1vTF5uBBzfZGO_u_H3JcmQvk",
+//   authDomain: "leafify-72dda.firebaseapp.com",
+//   "project_id": "leaf-4eb29",
+//   storageBucket: "leafify-72dda.appspot.com",
+//   messagingSenderId: "713980236597",
+//   appId: "1:713980236597:web:c94a3324b116c68c80327c"
+// };
+const firebaseConfig = {
+  apiKey: "AIzaSyBGiHcZqg0AHntQ5jNaW755mvZFtMrdw8Q",
+  authDomain: "leaf-4eb29.firebaseapp.com",
+  projectId: "leaf-4eb29",
+  storageBucket: "leaf-4eb29.firebasestorage.app",
+  messagingSenderId: "229613624118",
+  appId: "1:229613624118:web:6d9a676ffd3bd4f015b197",
+  measurementId: "G-Y0KQHN7YRV"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const signupForm = document.getElementById("signup-form");
+const errorMessage = document.getElementById("error-message");
+
+signupForm.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+    errorMessage.textContent = "";
+
+    try {
+
+        const email = signupForm.email.value;
+        const password = signupForm.password.value;
+
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+        const idToken = await userCredential.user.getIdToken();
+
+        const response = await fetch("/session-login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idToken: idToken
             })
-            .catch(error => {
-                console.error('Sign up process error:', error);
-                if (error.code === 'auth/email-already-in-use') {
-                    errorMessage.textContent = 'This email is already registered.';
-                } else {
-                    errorMessage.textContent = 'An error occurred. Please try again.';
-                }
-            });
-    });
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.error || "Session creation failed");
+        }
+
+        window.location.href = "/dashboard";
+
+    } catch (error) {
+
+        console.error("Signup error:", error);
+
+        if (error.code === "auth/email-already-in-use") {
+            errorMessage.textContent = "Email already registered.";
+        }
+        else if (error.code === "auth/invalid-email") {
+            errorMessage.textContent = "Invalid email address.";
+        }
+        else if (error.code === "auth/weak-password") {
+            errorMessage.textContent = "Password must be at least 6 characters.";
+        }
+        else {
+            errorMessage.textContent = error.message || "Signup failed.";
+        }
+
+    }
+
+});
+
 </script>
 </body>
 </html>
