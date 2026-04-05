@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AyuMed — Therapeutic Plant Intelligence</title>
+<title>AyuMed — EffNetB0 Ayurvedic Plant Identification &amp; Therapeutic Support</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -273,10 +273,12 @@ main {
   border-radius: var(--r);
   padding: 18px;
   position: relative;
+  overflow: hidden;
+  min-width: 0;
 }
 
 /* Result card */
-.result-card { display: flex; flex-direction: column; gap: 12px; }
+.result-card { display: flex; flex-direction: column; gap: 10px; min-width: 0; overflow: hidden; }
 
 /* Alerts */
 .alert {
@@ -295,7 +297,7 @@ main {
 
 /* Confidence bars */
 .conf-item { margin-bottom: 10px; }
-.conf-name { font-size: 13px; font-weight: 500; color: var(--text); }
+.conf-name { font-size: 13px; font-weight: 500; color: var(--text); word-break: break-word; overflow-wrap: break-word; }
 .conf-row  { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
 .conf-bar  { flex: 1; height: 5px; background: rgba(90,122,86,0.15); border-radius: 999px; overflow: hidden; }
 .conf-fill { height: 100%; border-radius: 999px; transition: width 0.8s ease; }
@@ -329,9 +331,9 @@ main {
 .badge-unknown { background: rgba(107,107,85,0.1); color: var(--text-lt); border: 1px solid rgba(107,107,85,0.2); }
 
 .safety-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
-.safety-metric { background: rgba(245,240,232,0.8); border-radius: var(--r-sm); padding: 8px; text-align: center; }
-.safety-metric-label { font-size: 10px; color: var(--text-lt); letter-spacing: 0.5px; }
-.safety-metric-val   { font-size: 12px; font-weight: 500; color: var(--text); margin-top: 3px; }
+.safety-metric { background: rgba(245,240,232,0.8); border-radius: var(--r-sm); padding: 8px; text-align: center; overflow: hidden; }
+.safety-metric-label { font-size: 10px; color: var(--text-lt); letter-spacing: 0.5px; white-space: nowrap; }
+.safety-metric-val   { font-size: 11px; font-weight: 500; color: var(--text); margin-top: 3px; word-break: break-word; overflow-wrap: break-word; }
 
 /* Inner tabs */
 .inner-tabs { border-bottom: 1px solid var(--border); display: flex; gap: 0; margin-bottom: 14px; }
@@ -346,7 +348,7 @@ main {
 .inner-tab:hover { color: var(--sage); }
 .inner-tab.active { color: var(--forest); border-bottom-color: var(--gold); }
 
-.tab-pane { display: none; font-size: 13px; color: var(--text-m); line-height: 1.7; max-height: 200px; overflow-y: auto; }
+.tab-pane { display: none; font-size: 13px; color: var(--text-m); line-height: 1.7; max-height: 200px; overflow-y: auto; overflow-x: hidden; word-break: break-word; overflow-wrap: break-word; }
 .tab-pane.active { display: block; animation: fadeUp 0.3s ease; }
 .tab-pane p { margin-bottom: 8px; }
 .tab-pane ul { margin-left: 1.2rem; margin-bottom: 8px; }
@@ -380,9 +382,9 @@ main {
 .section-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--forest); margin-bottom: 4px; }
 .section-sub { font-size: 12px; color: var(--text-lt); margin-bottom: 16px; }
 .remedies-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
-.remedy-card { background: rgba(255,255,255,0.7); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; border-left: 3px solid var(--gold); }
-.remedy-title { font-size: 13px; font-weight: 500; color: var(--forest); margin-bottom: 6px; }
-.remedy-body  { font-size: 12px; color: var(--text-m); line-height: 1.6; }
+.remedy-card { background: rgba(255,255,255,0.7); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; border-left: 3px solid var(--gold); overflow: hidden; }
+.remedy-title { font-size: 13px; font-weight: 500; color: var(--forest); margin-bottom: 6px; word-break: break-word; }
+.remedy-body  { font-size: 12px; color: var(--text-m); line-height: 1.6; word-break: break-word; overflow-wrap: break-word; }
 
 /* Drug interaction */
 .drug-check-wrap { margin-top: 16px; padding: 14px; background: rgba(245,240,232,0.6); border: 1px solid var(--border); border-radius: var(--r); }
@@ -396,7 +398,7 @@ main {
 
 /* Ayurvedic plant info bar */
 .plant-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.plant-meta-chip { font-size: 11px; padding: 3px 10px; border-radius: 999px; background: rgba(90,122,86,0.1); border: 1px solid rgba(90,122,86,0.2); color: var(--sage); }
+.plant-meta-chip { font-size: 11px; padding: 3px 10px; border-radius: 999px; background: rgba(90,122,86,0.1); border: 1px solid rgba(90,122,86,0.2); color: var(--sage); max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; vertical-align: middle; }
 
 /* ===== SYMPTOM MODE ===== */
 .symptom-search-box { display: flex; gap: 10px; margin-bottom: 14px; }
@@ -540,12 +542,64 @@ footer { width: 100%; max-width: 1200px; padding: 16px 0; margin-top: 12px; disp
 
 .fade-in { animation: fadeUp 0.4s ease; }
 
+/* Safety danger banner */
+.safety-danger-banner {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border-radius: var(--r);
+  margin-bottom: 12px;
+  animation: fadeUp 0.3s ease;
+}
+.safety-danger-banner.toxic {
+  background: rgba(192,57,43,0.1);
+  border: 2px solid rgba(192,57,43,0.5);
+}
+.safety-danger-banner.caution {
+  background: rgba(212,136,42,0.1);
+  border: 2px solid rgba(212,136,42,0.4);
+}
+.sdb-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
+.safety-danger-banner.toxic .sdb-icon  { color: var(--rust); }
+.safety-danger-banner.caution .sdb-icon { color: var(--amber); }
+.sdb-title {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.safety-danger-banner.toxic .sdb-title   { color: var(--rust); }
+.safety-danger-banner.caution .sdb-title { color: #8a5a10; }
+.sdb-msg { font-size: 12px; line-height: 1.6; }
+.safety-danger-banner.toxic .sdb-msg   { color: #8b1a12; }
+.safety-danger-banner.caution .sdb-msg { color: #7a5010; }
+
 /* Growing guide full section */
 .growing-full { display: grid; gap: 12px; }
 .growing-row { display: grid; grid-template-columns: 1fr 2fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid rgba(90,122,86,0.08); font-size: 12px; }
 .growing-row:last-child { border-bottom: none; }
 .growing-key { color: var(--text-lt); font-weight: 500; font-size: 11px; letter-spacing: 0.3px; text-transform: uppercase; }
 .growing-value { color: var(--text-m); }
+
+/* Ayurvedic classification panel */
+.ayur-panel { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px; }
+.ayur-badge-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.ayur-is-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase;
+  padding: 5px 14px; border-radius: 999px;
+}
+.ayur-yes { background: rgba(201,168,76,0.18); color: #7a5a10; border: 1.5px solid rgba(201,168,76,0.5); }
+.ayur-no  { background: rgba(107,107,85,0.1); color: var(--text-lt); border: 1px solid rgba(107,107,85,0.2); }
+.ayur-visha { background: rgba(192,57,43,0.12); color: var(--rust); border: 1.5px solid rgba(192,57,43,0.4); }
+.ayur-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; min-width: 0; }
+.ayur-card { background: rgba(245,240,232,0.8); border: 1px solid rgba(201,168,76,0.2); border-radius: var(--r-sm); padding: 10px 12px; overflow: hidden; word-break: break-word; }
+.ayur-card-label { font-size: 9px; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text-lt); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ayur-card-val { font-size: 12px; color: var(--text); line-height: 1.5; word-break: break-word; overflow-wrap: break-word; hyphens: auto; }
+.ayur-card-val.sanskrit { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 14px; color: var(--gold); word-break: break-word; }
+.ayur-formulations { margin-top: 8px; font-size: 12px; color: var(--text-m); padding: 8px 12px; background: rgba(201,168,76,0.06); border-radius: var(--r-sm); border: 1px solid rgba(201,168,76,0.15); }
+.ayur-not-badge { padding: 10px 14px; background: rgba(107,107,85,0.08); border-radius: var(--r-sm); font-size: 12px; color: var(--text-lt); margin-top: 8px; }
+.ayur-karma-chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.ayur-karma-chip { font-size: 10px; padding: 3px 10px; border-radius: 999px; background: rgba(26,46,26,0.08); border: 1px solid rgba(90,122,86,0.25); color: var(--sage); }
 </style>
 </head>
 <body>
@@ -575,14 +629,15 @@ footer { width: 100%; max-width: 1200px; padding: 16px 0; margin-top: 12px; disp
   <div class="main-header">
     <div class="header-eyebrow">Ayurvedic Therapeutic Intelligence</div>
     <div class="header-title">Identify. Understand. <em>Heal.</em></div>
-    <div class="header-sub">AI-powered medicinal plant recognition with complete Ayurvedic therapeutic analysis</div>
+    <div class="header-sub">EffNetB0-based Ayurvedic plant identification with Ayurvedic classification &amp; therapeutic support chatbot</div>
     <div class="header-pills">
-      <span class="header-pill">Vision AI Identification</span>
+      <span class="header-pill">EffNetB0 + Vision AI</span>
+      <span class="header-pill">Ayurvedic Classification</span>
       <span class="header-pill">Safety Scoring</span>
       <span class="header-pill">Symptom Search</span>
       <span class="header-pill">Drug Interaction Check</span>
       <span class="header-pill">Dosha Profiling</span>
-      <span class="header-pill">Plant Comparison</span>
+      <span class="header-pill">Therapeutic Chatbot</span>
     </div>
   </div>
 
@@ -642,6 +697,8 @@ footer { width: 100%; max-width: 1200px; padding: 16px 0; margin-top: 12px; disp
           <div class="loader"></div>
           <div class="loader-text">Analysing plant...</div>
         </div>
+        <!-- Safety danger banner — shown for toxic/caution plants -->
+        <div id="safety-danger-banner" style="display:none;margin-bottom:0"></div>
         <div id="result-content" class="result-card" style="display:none">
           <div id="conf-warning" class="alert alert-amber" style="display:none">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
@@ -691,6 +748,22 @@ footer { width: 100%; max-width: 1200px; padding: 16px 0; margin-top: 12px; disp
             </div>
             <div class="interaction-result" id="interaction-result"></div>
           </div>
+          <div id="drug-check-blocked" class="alert alert-red" style="display:none;margin-top:8px;font-size:12px">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            Drug interaction checking is disabled for toxic plants.
+          </div>
+          <!-- Ayurvedic Classification Panel -->
+          <div class="ayur-panel" id="ayur-panel" style="display:none">
+            <div style="font-size:10px;letter-spacing:0.8px;text-transform:uppercase;color:var(--text-lt);margin-bottom:8px">Ayurvedic Classification</div>
+            <div class="ayur-badge-wrap">
+              <span id="ayur-is-badge" class="ayur-is-badge ayur-yes">Ayurvedic Plant</span>
+              <span id="ayur-classification" style="font-size:11px;color:var(--text-lt)"></span>
+            </div>
+            <div id="ayur-not-reason" class="ayur-not-badge" style="display:none"></div>
+            <div class="ayur-grid" id="ayur-grid"></div>
+            <div id="ayur-karma-chips" class="ayur-karma-chips"></div>
+            <div id="ayur-formulations" class="ayur-formulations" style="display:none"></div>
+          </div>
         </div>
       </div>
 
@@ -716,7 +789,15 @@ footer { width: 100%; max-width: 1200px; padding: 16px 0; margin-top: 12px; disp
     <div class="remedies-section" id="remedies-section" style="display:none">
       <div class="section-title">Home Remedy Suggestions</div>
       <div class="section-sub">Traditional preparations from Ayurvedic practice</div>
-      <div class="remedies-grid" id="remedies-grid"></div>
+      <div id="remedies-caution-header" class="alert alert-amber" style="display:none;margin-bottom:12px">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+      <div><strong>Caution:</strong> These remedies are for educational purposes only. This plant requires practitioner supervision. Do NOT self-medicate.</div>
+    </div>
+    <div id="remedies-blocked-notice" class="alert alert-red" style="display:none;margin-bottom:12px">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"/></svg>
+      <div><strong>Home remedies blocked.</strong> This plant is classified as toxic and has no safe medicinal applications. Do not attempt to use it in any preparation.</div>
+    </div>
+    <div class="remedies-grid" id="remedies-grid"></div>
     </div>
 
     <!-- Growing Guide Full -->
@@ -864,7 +945,7 @@ footer { width: 100%; max-width: 1200px; padding: 16px 0; margin-top: 12px; disp
 </div>
 
 <script>
-let selectedFile = null, currentPlantName = '', currentDosha = '';
+let selectedFile = null, currentPlantName = '', currentDosha = '', currentDangerLevel = 'safe';
 let comparePlantsArr = [];
 
 /* ===== Mode tabs ===== */
@@ -883,8 +964,7 @@ document.getElementById('img-input').addEventListener('change', e => {
   if (!selectedFile) return;
   const reader = new FileReader();
   reader.onload = ev => {
-    const zone = document.getElementById('upload-zone');
-    zone.innerHTML = `<img src="${ev.target.result}" alt="Plant">`;
+    document.getElementById('upload-zone').innerHTML = `<img src="${ev.target.result}" alt="Plant">`;
   };
   reader.readAsDataURL(selectedFile);
 });
@@ -892,7 +972,7 @@ document.getElementById('img-input').addEventListener('change', e => {
 /* ===== Identify ===== */
 document.getElementById('identify-btn').addEventListener('click', async () => {
   if (!selectedFile) { alert('Please choose an image first.'); return; }
-  showLoader('result');
+  showLoader();
   const fd = new FormData();
   fd.append('image', selectedFile);
   try {
@@ -903,28 +983,96 @@ document.getElementById('identify-btn').addEventListener('click', async () => {
   } catch (e) { showResultError(e.message); }
 });
 
-function showLoader(zone) {
-  if (zone === 'result') {
-    document.getElementById('result-placeholder').style.display = 'none';
-    document.getElementById('result-content').style.display     = 'none';
-    document.getElementById('result-loader').style.display      = 'flex';
-    document.getElementById('chatbot-panel').style.display      = 'none';
-    document.getElementById('remedies-section').style.display   = 'none';
-    document.getElementById('growing-full-section').style.display = 'none';
-    document.getElementById('drug-check-wrap').style.display    = 'none';
-    document.getElementById('add-compare-btn').style.display    = 'none';
-  }
+function showLoader() {
+  /* Hide panels */
+  document.getElementById('result-placeholder').style.display    = 'none';
+  document.getElementById('result-content').style.display        = 'none';
+  document.getElementById('result-loader').style.display         = 'flex';
+  document.getElementById('chatbot-panel').style.display         = 'none';
+  document.getElementById('add-compare-btn').style.display       = 'none';
+
+  /* Fully reset safety banner */
+  const banner = document.getElementById('safety-danger-banner');
+  banner.style.display  = 'none';
+  banner.innerHTML      = '';
+
+  /* Fully reset remedies section — clear stale content + all sub-notices */
+  document.getElementById('remedies-section').style.display         = 'none';
+  document.getElementById('remedies-grid').innerHTML                 = '';
+  document.getElementById('remedies-blocked-notice').style.display  = 'none';
+  document.getElementById('remedies-caution-header').style.display  = 'none';
+
+  /* Reset growing guide */
+  document.getElementById('growing-full-section').style.display   = 'none';
+  document.getElementById('growing-full-content').innerHTML        = '';
+
+  /* Reset drug checker */
+  document.getElementById('drug-check-wrap').style.display         = 'none';
+  document.getElementById('drug-check-blocked').style.display      = 'none';
+  document.getElementById('interaction-result').style.display      = 'none';
+  document.getElementById('interaction-result').innerHTML           = '';
+  document.getElementById('drug-input').value                       = '';
+
+  /* Reset Ayurvedic panel */
+  document.getElementById('ayur-panel').style.display              = 'none';
+  document.getElementById('ayur-grid').innerHTML                   = '';
+  document.getElementById('ayur-karma-chips').innerHTML            = '';
+  document.getElementById('ayur-formulations').style.display       = 'none';
+  document.getElementById('ayur-not-reason').style.display         = 'none';
+
+  /* Reset chat */
+  document.getElementById('chat-msgs').innerHTML                   = '';
+  currentDangerLevel = 'safe';
 }
 
 function showResultError(msg) {
-  document.getElementById('result-loader').style.display    = 'none';
+  document.getElementById('result-loader').style.display      = 'none';
   document.getElementById('result-placeholder').style.display = 'flex';
-  document.getElementById('result-placeholder').innerHTML   = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:36px;height:36px;opacity:0.3;margin-bottom:10px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p style="color:#c0392b;font-size:13px">${msg}</p>`;
+  document.getElementById('result-placeholder').innerHTML     = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:36px;height:36px;opacity:0.3;margin-bottom:10px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p style="color:#c0392b;font-size:13px">${msg}</p>`;
+  /* Also hide/reset all output sections on error */
+  document.getElementById('remedies-section').style.display         = 'none';
+  document.getElementById('remedies-grid').innerHTML                 = '';
+  document.getElementById('remedies-blocked-notice').style.display  = 'none';
+  document.getElementById('remedies-caution-header').style.display  = 'none';
+  document.getElementById('safety-danger-banner').style.display     = 'none';
+  document.getElementById('growing-full-section').style.display     = 'none';
+  document.getElementById('chatbot-panel').style.display            = 'none';
+  document.getElementById('ayur-panel').style.display               = 'none';
+  document.getElementById('drug-check-blocked').style.display       = 'none';
+  document.getElementById('drug-check-wrap').style.display          = 'none';
+  currentDangerLevel = 'safe';
 }
 
 function renderResults(data) {
   document.getElementById('result-loader').style.display  = 'none';
   document.getElementById('result-content').style.display = 'flex';
+
+  const gate = data.gate || { danger_level:'safe', show_remedies:true, show_drug_checker:true, show_growing_harvest:true };
+  currentDangerLevel = gate.danger_level || 'safe';
+
+  /* ===== SAFETY BANNER — shown for toxic/caution plants ===== */
+  const banner = document.getElementById('safety-danger-banner');
+  if (currentDangerLevel === 'toxic') {
+    banner.className = 'safety-danger-banner toxic';
+    banner.innerHTML = `
+      <div class="sdb-icon">&#9762;</div>
+      <div class="sdb-body">
+        <div class="sdb-title">TOXIC PLANT — DO NOT USE MEDICINALLY</div>
+        <div class="sdb-msg">${gate.danger_message || 'This plant is highly toxic. Do not consume, apply, or use in any home remedy.'}</div>
+      </div>`;
+    banner.style.display = 'flex';
+  } else if (currentDangerLevel === 'caution') {
+    banner.className = 'safety-danger-banner caution';
+    banner.innerHTML = `
+      <div class="sdb-icon">&#9888;</div>
+      <div class="sdb-body">
+        <div class="sdb-title">CAUTION — Use only under practitioner supervision</div>
+        <div class="sdb-msg">${gate.danger_message || 'This plant requires caution. Consult a qualified practitioner before any use.'}</div>
+      </div>`;
+    banner.style.display = 'flex';
+  } else {
+    banner.style.display = 'none';
+  }
 
   /* Alerts */
   document.getElementById('conf-warning').style.display    = data.low_confidence ? 'flex' : 'none';
@@ -946,22 +1094,22 @@ function renderResults(data) {
       </div>`;
   });
 
-  /* Plant meta */
+  /* Plant meta chips */
   const d = data.description || {};
   const metaEl = document.getElementById('plant-meta');
   metaEl.innerHTML = '';
   if (d.sanskrit_name) metaEl.innerHTML += `<span class="plant-meta-chip" style="color:var(--gold);border-color:rgba(201,168,76,0.3)">${d.sanskrit_name}</span>`;
   if (d.parts_used)    metaEl.innerHTML += `<span class="plant-meta-chip">Parts: ${d.parts_used}</span>`;
-  if (d.taste_in_ayurveda) metaEl.innerHTML += `<span class="plant-meta-chip">${d.taste_in_ayurveda}</span>`;
+  if (d.taste_in_ayurveda && currentDangerLevel !== 'toxic') metaEl.innerHTML += `<span class="plant-meta-chip">${d.taste_in_ayurveda}</span>`;
 
   /* Safety panel */
   if (data.safety) {
-    const s = data.safety;
+    const s     = data.safety;
     const score = parseInt(s.safety_score) || 5;
     const ring  = document.getElementById('score-ring');
     ring.textContent = score;
     ring.className   = 'score-ring ' + (score >= 7 ? 'high' : score >= 4 ? 'mid' : 'low');
-    const lvl  = (s.overall_safety || 'unknown').toLowerCase();
+    const lvl   = (s.overall_safety || 'unknown').toLowerCase();
     const badge = document.getElementById('safety-badge');
     badge.textContent = s.overall_safety || 'Unknown';
     badge.className   = 'safety-badge badge-' + (lvl === 'safe' ? 'safe' : lvl === 'caution' ? 'caution' : lvl === 'toxic' ? 'toxic' : 'unknown');
@@ -981,30 +1129,43 @@ function renderResults(data) {
   document.getElementById('pane-warn').innerHTML = marked.parse(d.warnings       || 'No specific warnings.');
   document.getElementById('pane-meta').innerHTML = marked.parse(
     [d.active_compounds ? '**Active compounds:** ' + d.active_compounds : '',
-     d.common_names ? '**Common names:** ' + d.common_names : ''].filter(Boolean).join('\n\n') || 'Consult Ayurvedic texts.'
+     d.common_names     ? '**Common names:** '     + d.common_names     : ''].filter(Boolean).join('\n\n') || 'Consult botanical literature.'
   );
 
-  /* Growing guide (full section) */
+  /* Inner tab reset */
+  document.querySelectorAll('.inner-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelector('.inner-tab[data-pane="uses"]').classList.add('active');
+  document.getElementById('pane-uses').classList.add('active');
+
+  /* ===== GROWING GUIDE — always show, but harvest fields are blocked server-side for toxic plants ===== */
   if (data.growing && Object.keys(data.growing).length) {
     const g = data.growing;
     const fields = [
       ['Climate zones', g.climate_zones], ['Best planting season', g.best_planting_season],
       ['Harvest season', g.harvest_season], ['Soil pH', g.soil_ph],
       ['Sunlight', g.sunlight], ['Watering', g.watering],
-      ['Propagation', g.propagation], ['Container friendly', g.container_friendly === true ? 'Yes' : g.container_friendly === false ? 'No' : g.container_friendly],
+      ['Propagation', g.propagation],
+      ['Container friendly', g.container_friendly === true ? 'Yes' : g.container_friendly === false ? 'No' : g.container_friendly],
       ['Companion plants', g.companion_plants], ['Pests & diseases', g.pests_diseases],
       ['India growing regions', g.india_growing_regions], ['Harvest tip', g.harvest_tip]
     ].filter(([,v]) => v && v !== undefined && v !== null);
-    document.getElementById('growing-full-content').innerHTML = fields.map(([k,v]) =>
-      `<div class="growing-row"><div class="growing-key">${k}</div><div class="growing-value">${v}</div></div>`
-    ).join('');
+    document.getElementById('growing-full-content').innerHTML = fields.map(([k,v]) => {
+      const isDanger = typeof v === 'string' && (v.toUpperCase().startsWith('NOT APPLICABLE') || v.toUpperCase().startsWith('DANGER'));
+      return `<div class="growing-row"><div class="growing-key">${k}</div><div class="growing-value" style="${isDanger ? 'color:var(--rust);font-weight:500' : ''}">${v}</div></div>`;
+    }).join('');
     document.getElementById('growing-full-section').style.display = 'block';
   }
 
-  /* Remedies */
-  if (d.home_remedies) {
+  /* ===== HOME REMEDIES — only if gate allows AND description has them ===== */
+  if (gate.show_remedies && d.home_remedies) {
     const parts = d.home_remedies.split('\n\n').filter(Boolean);
     const grid  = document.getElementById('remedies-grid');
+    if (currentDangerLevel === 'caution') {
+      document.getElementById('remedies-caution-header').style.display = 'block';
+    } else {
+      document.getElementById('remedies-caution-header').style.display = 'none';
+    }
     if (parts.length > 1) {
       grid.innerHTML = parts.map(p => {
         const clean = p.replace(/\*\*\d+\.\*\*/,'').trim();
@@ -1017,29 +1178,104 @@ function renderResults(data) {
       grid.innerHTML = `<div style="font-size:13px;color:var(--text-m);line-height:1.7;grid-column:1/-1">${marked.parse(d.home_remedies)}</div>`;
     }
     document.getElementById('remedies-section').style.display = 'block';
+  } else if (!gate.show_remedies) {
+    /* Toxic plant — show danger notice instead of remedies */
+    document.getElementById('remedies-blocked-notice').style.display = 'flex';
+    document.getElementById('remedies-section').style.display        = 'block';
   }
 
-  /* Chatbot */
+  /* ===== CHATBOT — show for all plants but pass danger level ===== */
   currentPlantName = data.suggestions[0].plant_name;
   document.getElementById('chat-plant-name').textContent = currentPlantName;
   document.getElementById('chat-msgs').innerHTML = '';
-  addMsg(`I can answer detailed questions about <em>${currentPlantName}</em> — dosage, preparation, interactions, uses, and more.`, 'bot');
+  const chatIntro = currentDangerLevel === 'toxic'
+    ? `⚠️ <em>${currentPlantName}</em> is a <strong>toxic plant</strong>. I can answer botanical and scientific questions, but I cannot provide dosage, remedy, or preparation guidance.`
+    : `I can answer detailed questions about <em>${currentPlantName}</em> — dosage, preparation, interactions, uses, and more.`;
+  addMsg(chatIntro, 'bot');
   document.getElementById('chatbot-panel').style.display = 'flex';
 
-  /* Drug check */
-  document.getElementById('drug-check-wrap').style.display = 'block';
+  /* ===== DRUG CHECKER — only show for non-toxic plants ===== */
+  document.getElementById('drug-check-wrap').style.display = gate.show_drug_checker ? 'block' : 'none';
+  if (!gate.show_drug_checker) {
+    document.getElementById('drug-check-blocked').style.display = 'flex';
+  }
 
   /* Add to compare */
   document.getElementById('add-compare-btn').style.display = 'block';
-  document.getElementById('add-compare-btn').onclick = () => { addToCompare(currentPlantName); document.querySelector('.mode-tab[data-mode="compare"]').click(); };
+  document.getElementById('add-compare-btn').onclick = () => {
+    addToCompare(currentPlantName);
+    document.querySelector('.mode-tab[data-mode="compare"]').click();
+  };
 
-  /* Inner tab click restore */
-  document.querySelectorAll('.inner-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
-  document.querySelector('.inner-tab[data-pane="uses"]').classList.add('active');
-  document.getElementById('pane-uses').classList.add('active');
+  /* Ayurvedic Classification Panel */
+  if (data.ayurvedic_info) renderAyurvedicPanel(data.ayurvedic_info);
 
   saveHistory(currentPlantName, document.querySelector('#upload-zone img')?.src || '');
+}
+
+function renderAyurvedicPanel(a) {
+  const panel  = document.getElementById('ayur-panel');
+  const badge  = document.getElementById('ayur-is-badge');
+  const clsEl  = document.getElementById('ayur-classification');
+  const notEl  = document.getElementById('ayur-not-reason');
+  const gridEl = document.getElementById('ayur-grid');
+  const karmaEl = document.getElementById('ayur-karma-chips');
+  const formEl = document.getElementById('ayur-formulations');
+
+  const cls = (a.classification || '').toLowerCase();
+
+  if (a.is_ayurvedic === false) {
+    badge.textContent = 'Not in Ayurvedic pharmacopoeia';
+    badge.className   = 'ayur-is-badge ayur-no';
+    clsEl.textContent = '';
+    notEl.textContent = a.not_ayurvedic_reason || 'This plant does not appear in classical Ayurvedic texts.';
+    notEl.style.display = 'block';
+    gridEl.innerHTML  = '';
+    karmaEl.innerHTML = '';
+    formEl.style.display = 'none';
+  } else if (cls.includes('visha')) {
+    badge.textContent = '❢ Visha — Toxic (Ayurvedic toxicology)';
+    badge.className   = 'ayur-is-badge ayur-visha';
+    clsEl.textContent = 'Classified in Visha Chikitsa (toxicology) texts only';
+    notEl.textContent = 'This plant appears in Ayurvedic toxicology texts but is NOT used as a therapeutic remedy. It is not safe for internal use.';
+    notEl.style.display = 'block';
+    gridEl.innerHTML  = '';
+    karmaEl.innerHTML = '';
+    formEl.style.display = 'none';
+  } else {
+    badge.textContent = '♥ Ayurvedic Plant';
+    badge.className   = 'ayur-is-badge ayur-yes';
+    clsEl.textContent = a.classification || '';
+    notEl.style.display = 'none';
+
+    const fields = [
+      ['Sanskrit Name', a.ayurvedic_name, true],
+      ['Classical Texts', a.classical_texts, false],
+      ['Primary Karma', a.primary_karma, false],
+      ['Rasa (Taste)', a.rasa, false],
+      ['Virya (Potency)', a.virya, false],
+      ['Vipaka', a.vipaka, false],
+      ['Guna (Qualities)', a.guna, false],
+      ['Dosha Action', a.dosha_action, false],
+      ['Regional Use', a.regional_ayurvedic_use, false],
+    ].filter(([,v]) => v && v !== 'Unknown' && v !== 'Unable to determine');
+
+    gridEl.innerHTML = fields.map(([label, val, isSanskrit]) =>
+      `<div class="ayur-card"><div class="ayur-card-label">${label}</div><div class="ayur-card-val${isSanskrit ? ' sanskrit' : ''}">${val}</div></div>`
+    ).join('');
+
+    const cats = Array.isArray(a.therapeutic_categories) ? a.therapeutic_categories : [];
+    karmaEl.innerHTML = cats.map(c => `<span class="ayur-karma-chip">${c}</span>`).join('');
+
+    if (a.ayurvedic_formulations && a.ayurvedic_formulations !== 'Unknown') {
+      formEl.innerHTML = '<strong style="color:var(--sage)">Classical formulations:</strong> ' + a.ayurvedic_formulations;
+      formEl.style.display = 'block';
+    } else {
+      formEl.style.display = 'none';
+    }
+  }
+
+  panel.style.display = 'block';
 }
 
 /* Inner tabs */
@@ -1056,17 +1292,21 @@ document.getElementById('inner-tabs').addEventListener('click', e => {
 document.getElementById('drug-check-btn').addEventListener('click', async () => {
   const med = document.getElementById('drug-input').value.trim();
   if (!med || !currentPlantName) return;
+  if (currentDangerLevel === 'toxic') return; /* Should never reach here — button hidden */
   const resEl = document.getElementById('interaction-result');
   resEl.style.display = 'block';
   resEl.innerHTML = '<div class="loader-wrap" style="padding:16px"><div class="loader" style="width:24px;height:24px;border-width:2px"></div></div>';
   try {
-    const res  = await fetch('/drug-check', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({plant_name: currentPlantName, medication: med}) });
+    const res  = await fetch('/drug-check', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ plant_name: currentPlantName, medication: med, danger_level: currentDangerLevel })
+    });
     const data = await res.json();
     if (data.error) throw new Error(data.error);
-    const score = parseInt(data.interaction_score) || 0;
-    const lvl   = data.interaction_level || 'Unknown';
+    const score    = parseInt(data.interaction_score) || 0;
+    const lvl      = data.interaction_level || 'Unknown';
     const colorMap = { None:'var(--moss)', Minor:'var(--gold)', Moderate:'var(--amber)', Major:'var(--rust)', Unknown:'var(--text-lt)' };
-    const col = colorMap[lvl] || 'var(--text-lt)';
+    const col      = colorMap[lvl] || 'var(--text-lt)';
     resEl.innerHTML = `
       <div style="margin-top:10px;font-size:12px">
         <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-weight:500">${currentPlantName} + ${med}</span><span style="color:${col};font-weight:600">${lvl}</span></div>
@@ -1092,7 +1332,10 @@ async function sendChat() {
   document.getElementById('chat-input').value = '';
   const tid = showTyping();
   try {
-    const res  = await fetch('/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({question:q, plant_name:currentPlantName, dosha:currentDosha}) });
+    const res  = await fetch('/chat', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ question:q, plant_name:currentPlantName, dosha:currentDosha, danger_level:currentDangerLevel })
+    });
     const data = await res.json();
     removeTyping(tid);
     addMsg(data.answer || data.error || 'No response.', 'bot');
@@ -1107,7 +1350,6 @@ function addMsg(text, who) {
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
 }
-
 function showTyping() {
   const msgs = document.getElementById('chat-msgs');
   const id   = 'typing-' + Date.now();
@@ -1145,24 +1387,32 @@ async function runSymptomSearch() {
 
 function renderSymptomResults(data) {
   document.getElementById('symptom-advice').textContent = data.general_advice || '';
-  if (data.avoid_foods) { document.getElementById('symptom-avoid').textContent = '&#127803; Avoid: ' + data.avoid_foods; document.getElementById('symptom-avoid').style.display = 'block'; }
+  if (data.avoid_foods) {
+    document.getElementById('symptom-avoid').textContent = '\u{1F343} Avoid: ' + data.avoid_foods;
+    document.getElementById('symptom-avoid').style.display = 'block';
+  }
   const cardsEl = document.getElementById('symptom-cards');
   cardsEl.innerHTML = '';
   (data.recommendations || []).forEach(r => {
+    const isCaution = (r.safety_level || '').toLowerCase() === 'caution';
     const card = document.createElement('div');
     card.className = 'symptom-card fade-in';
+    card.style.borderLeftColor = isCaution ? 'var(--amber)' : 'var(--leaf)';
     card.innerHTML = `
       <div class="sc-header">
         <div class="sc-names">
           <div class="sc-plant">${r.plant_name}</div>
           <div class="sc-common">${r.common_name || ''} ${r.sanskrit_name ? '&bull; <span class="sc-sanskrit">'+r.sanskrit_name+'</span>' : ''}</div>
         </div>
-        <button class="btn btn-outline btn-sm" onclick="addToCompare('${r.plant_name}');document.querySelector('.mode-tab[data-mode=compare]').click()">+ Compare</button>
+        <div style="display:flex;gap:6px;align-items:center;flex-shrink:0">
+          ${isCaution ? '<span style="font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(212,136,42,0.15);color:#8a5a10;border:1px solid rgba(212,136,42,0.3)">Caution</span>' : '<span style="font-size:10px;padding:2px 8px;border-radius:999px;background:rgba(90,122,86,0.15);color:var(--sage);border:1px solid rgba(90,122,86,0.3)">Safe</span>'}
+          <button class="btn btn-outline btn-sm" onclick="addToCompare('${r.plant_name}');document.querySelector('.mode-tab[data-mode=compare]').click()">+ Compare</button>
+        </div>
       </div>
       <div class="sc-grid">
         <div class="sc-field"><label>Why it helps</label><p>${r.why_it_helps}</p></div>
         <div class="sc-field"><label>How to use</label><p>${r.how_to_use}</p></div>
-        ${r.dosage   ? `<div class="sc-field"><label>Dosage</label><p>${r.dosage}</p></div>` : ''}
+        ${r.dosage   ? `<div class="sc-field"><label>Dosage</label><p>${r.dosage}</p></div>`   : ''}
         ${r.duration ? `<div class="sc-field"><label>Duration</label><p>${r.duration}</p></div>` : ''}
       </div>
       ${r.safety_note ? `<div class="sc-note">&#9888; ${r.safety_note}</div>` : ''}`;
@@ -1190,8 +1440,7 @@ function removeFromCompare(name) {
   document.getElementById('compare-run-btn').disabled = comparePlantsArr.length < 2;
 }
 function renderCompareChips() {
-  const el = document.getElementById('compare-chips');
-  el.innerHTML = comparePlantsArr.map(n =>
+  document.getElementById('compare-chips').innerHTML = comparePlantsArr.map(n =>
     `<span class="plant-chip">${n}<span class="plant-chip-x" onclick="removeFromCompare('${n}')">&times;</span></span>`
   ).join('');
 }
@@ -1216,9 +1465,14 @@ function renderCompareTable(data) {
     ['Sanskrit Name','sanskrit_name'], ['Primary Use','primary_use'], ['Key Compounds','key_compounds'],
     ['Best For','best_for'], ['Avoid If','avoid_if'], ['Potency','potency'],
     ['Taste','taste'], ['Dosha Balance','dosha_balance'],
-    ['Preparation','preparation'], ['Onset Time','onset_time']
+    ['Preparation','preparation'], ['Onset Time','onset_time'], ['Safety','safety_warning']
   ];
-  document.getElementById('compare-thead').innerHTML = '<tr><th>Property</th>' + plants.map(p=>`<th>${p.name}</th>`).join('') + '</tr>';
+  document.getElementById('compare-thead').innerHTML =
+    '<tr><th>Property</th>' + plants.map(p => {
+      const toxStyle = p.is_toxic ? 'background:#7f1d1d;color:#fca5a5;' : '';
+      return `<th style="${toxStyle}">${p.name}${p.is_toxic ? ' &#9762;' : ''}</th>`;
+    }).join('') + '</tr>';
+
   document.getElementById('compare-tbody').innerHTML = fields.map(([label, key]) => `
     <tr>
       <td>${label}</td>
@@ -1228,13 +1482,17 @@ function renderCompareTable(data) {
           const cls = v.toLowerCase()==='low'?'low':v.toLowerCase()==='high'?'high':'med';
           v = `<span class="potency-chip potency-${cls}">${v}</span>`;
         }
-        return `<td>${v}</td>`;
+        if (key === 'safety_warning' && p.is_toxic) {
+          v = `<span style="color:var(--rust);font-weight:600">&#9762; TOXIC — DO NOT USE</span>`;
+        }
+        const cellStyle = p.is_toxic ? 'background:rgba(192,57,43,0.05);' : '';
+        return `<td style="${cellStyle}">${v}</td>`;
       }).join('')}
     </tr>`).join('');
 
   const sumEl = document.getElementById('compare-summary');
   sumEl.innerHTML = '';
-  if (data.best_for_summary) sumEl.innerHTML += `<div class="compare-summary-card"><div class="csc-label">Summary</div><div class="csc-val">${data.best_for_summary}</div></div>`;
+  if (data.best_for_summary)   sumEl.innerHTML += `<div class="compare-summary-card"><div class="csc-label">Summary</div><div class="csc-val">${data.best_for_summary}</div></div>`;
   if (data.combination_advice) sumEl.innerHTML += `<div class="compare-summary-card"><div class="csc-label">Combining them</div><div class="csc-val">${data.combination_advice}</div></div>`;
   if (data.winner_for_beginners) sumEl.innerHTML += `<div class="compare-summary-card" style="grid-column:1/-1"><div class="csc-label">Best for beginners</div><div class="csc-val"><span class="winner-chip">${data.winner_for_beginners}</span></div></div>`;
   document.getElementById('compare-results').style.display = 'block';
@@ -1270,24 +1528,19 @@ document.getElementById('dosha-submit-btn').addEventListener('click', async () =
 function renderDoshaResult(data) {
   document.getElementById('dosha-loader').style.display = 'none';
   currentDosha = data.primary_dosha + (data.secondary_dosha && data.secondary_dosha !== 'None' ? '-' + data.secondary_dosha : '');
-
   document.getElementById('dosha-primary-name').textContent = data.primary_dosha + (data.secondary_dosha && data.secondary_dosha !== 'None' ? ' – ' + data.secondary_dosha : '');
-  document.getElementById('dosha-desc').textContent = data.description || '';
-  document.getElementById('dosha-foods-favor').textContent = data.foods_to_favor || '';
-  document.getElementById('dosha-foods-avoid').textContent = data.foods_to_avoid || '';
-
+  document.getElementById('dosha-desc').textContent         = data.description || '';
+  document.getElementById('dosha-foods-favor').textContent  = data.foods_to_favor || '';
+  document.getElementById('dosha-foods-avoid').textContent  = data.foods_to_avoid || '';
   const breakdown = data.dosha_breakdown || {};
   document.getElementById('dosha-bars').innerHTML = Object.entries(breakdown).map(([k, v]) =>
     `<div class="dosha-bar-item"><div class="dosha-bar-label">${k.charAt(0).toUpperCase()+k.slice(1)}</div>
      <div class="dosha-bar-track"><div class="dosha-bar-fill ${k}" style="width:${v}%"></div></div>
      <div class="dosha-pct">${v}%</div></div>`
   ).join('');
-
-  const plants = data.recommended_plants || [];
-  document.getElementById('dosha-plant-chips').innerHTML = plants.map(p =>
+  document.getElementById('dosha-plant-chips').innerHTML = (data.recommended_plants || []).map(p =>
     `<span class="dosha-chip plant" style="cursor:pointer" onclick="document.getElementById('symptom-input').value='${p}';document.querySelector('.mode-tab[data-mode=symptom]').click()">${p}</span>`
   ).join('');
-
   document.getElementById('dosha-result').style.display = 'block';
   document.getElementById('dosha-result').classList.add('fade-in');
 }
@@ -1305,7 +1558,6 @@ document.getElementById('dosha-reset-btn').addEventListener('click', () => {
 document.getElementById('history-btn').addEventListener('click', () => { loadHistory(); document.getElementById('history-modal').style.display = 'flex'; });
 document.getElementById('modal-close').addEventListener('click', () => document.getElementById('history-modal').style.display = 'none');
 document.getElementById('history-modal').addEventListener('click', e => { if(e.target.classList.contains('modal-backdrop')) document.getElementById('history-modal').style.display='none'; });
-
 function saveHistory(name, img) {
   let h = JSON.parse(localStorage.getItem('ayumed-history') || '[]');
   h = h.filter(i => i.name !== name);
