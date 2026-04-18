@@ -192,6 +192,54 @@ def session_login():
     except Exception:
         return jsonify({"error": "Failed to authenticate"}), 401
 
+
+# -------------------- Plant Image Validation --------------------
+
+def validate_plant_image(img_bytes: bytes, mimetype: str) -> dict:
+    """
+    Uses Groq vision to check if the image actually contains a plant
+    BEFORE running the full identification pipeline.
+    Returns: { "is_plant": bool, "confidence": float, "reason": str }
+    """
+    b64 = base64.standard_b64encode(img_bytes).decode('utf-8')
+
+    prompt = """Look at this image carefully.
+
+Your ONLY job is to determine: Does this image contain a plant, leaf, flower, tree, herb, or any botanical specimen?
+
+Answer strictly with this JSON and nothing else:
+{
+  "is_plant": true or false,
+  "confidence": 0.95,
+  "what_i_see": "Brief description of what is actually in the image",
+  "reason": "Why this is or is not a plant"
+}
+
+Rules:
+- is_plant = true ONLY if the main subject is clearly a plant, leaf, flower, stem, root, bark, fruit, vegetable, herb, tree, or botanical specimen
+- is_plant = false for: people, animals, food (already cooked/processed), vehicles, buildings, objects, electronics, landscapes without clear plants, abstract images, documents, logos, screenshots, and anything else that is NOT a plant
+- If you can see a plant as part of a larger scene but it is NOT the main subject, is_plant = false
+- confidence should reflect how certain you are (0.0 to 1.0)"""
+
+    try:
+        resp = groq_client.chat.completions.create(
+            model=VISION_MODEL,
+            temperature=0.1,
+            messages=[{"role": "user", "content": [
+                {"type": "image_url", "image_url": {"url": f"data:{mimetype};base64,{b64}"}},
+                {"type": "text", "text": prompt}
+            ]}]
+        )
+        result = clean_json(resp.choices[0].message.content)
+        if not result:
+            # If we can't parse the response, be conservative and allow it through
+            return {"is_plant": True, "confidence": 0.5, "what_i_see": "Unknown", "reason": "Could not validate image"}
+        return result
+    except Exception as e:
+        print(f"Plant validation error: {e}")
+        # On error, allow through — better to attempt than to falsely reject
+        return {"is_plant": True, "confidence": 0.5, "what_i_see": "Unknown", "reason": "Validation failed — proceeding"}
+
 # -------------------- Identify --------------------
 
 @app.route('/identify', methods=['POST'])
@@ -209,6 +257,17 @@ def identify():
     used_fallback = False
     suggestions   = None
 
+    # Step 1: Validate that the image actually contains a plant
+    validation = validate_plant_image(img_bytes, img_mimetype)
+    if not validation.get("is_plant", True):
+        what_seen = validation.get("what_i_see", "a non-plant image")
+        return jsonify({
+            'error': f'No plant detected. The image appears to show {what_seen}. Please upload a clear photo of a plant, leaf, flower, or herb.',
+            'not_a_plant': True,
+            'what_detected': what_seen
+        }), 422
+
+    # Step 2: Run Plant.id identification
     try:
         suggestions = _plant_id_identify(img_bytes, img_filename, img_mimetype)
     except requests.exceptions.HTTPError as e:
@@ -221,15 +280,35 @@ def identify():
         print(f"Plant.id error: {e} — switching to Groq vision")
         used_fallback = True
 
+    # Step 3: Groq vision fallback
     if used_fallback or not suggestions:
         try:
             suggestions   = _groq_vision_identify(img_bytes, img_mimetype)
             used_fallback = True
+        except ValueError as e:
+            # Model explicitly said it's not a plant
+            err_msg = str(e)
+            if err_msg.startswith("NOT_A_PLANT:"):
+                what_seen = err_msg.replace("NOT_A_PLANT:", "")
+                return jsonify({
+                    'error': f'No plant detected in the image. The image appears to show {what_seen}. Please upload a clear photo of a plant, leaf, flower, or herb.',
+                    'not_a_plant': True,
+                    'what_detected': what_seen
+                }), 422
+            return jsonify({'error': f'Identification failed: {err_msg}'}), 500
         except Exception as e:
             return jsonify({'error': f'All identification methods failed: {str(e)}'}), 500
 
     if not suggestions:
         return jsonify({'error': 'Could not identify the plant. Try a clearer image.'}), 404
+
+    # Reject very low-confidence identifications (all suggestions below threshold)
+    top_prob = suggestions[0]['probability']
+    if top_prob < 0.10:
+        return jsonify({
+            'error': 'The image does not appear to contain a recognisable plant. Please upload a clear photo of a plant, leaf, flower, or herb.',
+            'not_a_plant': True
+        }), 422
 
     plant_name = suggestions[0]['plant_name']
     low_conf   = suggestions[0]['probability'] < CONFIDENCE_THRESHOLD
@@ -583,29 +662,47 @@ def _plant_id_identify(img_bytes, filename, mimetype):
 
 def _groq_vision_identify(img_bytes, mimetype):
     b64 = base64.standard_b64encode(img_bytes).decode('utf-8')
-    prompt = """You are an expert botanist. Identify the plant in this image.
+    prompt = """You are an expert botanist. Identify the plant species in this image.
 
-Return ONLY valid JSON:
+IMPORTANT: If the image does NOT clearly show a plant, leaf, flower, herb, tree, or botanical specimen, return:
+{"not_a_plant": true, "what_i_see": "description of what is actually in the image"}
+
+If it IS a plant, return ONLY this JSON:
 {
   "suggestions": [
-    {"plant_name": "Scientific name", "common_name": "Common name", "probability": 0.85, "features": "Key visual features"},
-    {"plant_name": "Second possibility", "common_name": "Common name", "probability": 0.10, "features": "Why this matches"},
+    {"plant_name": "Scientific name", "common_name": "Common name", "probability": 0.85, "features": "Key visual features used to identify"},
+    {"plant_name": "Second possibility", "common_name": "Common name", "probability": 0.10, "features": "Why this could also match"},
     {"plant_name": "Third possibility", "common_name": "Common name", "probability": 0.05, "features": "Brief reason"}
   ]
 }
-Be conservative with probabilities. Lower all probabilities if the image is blurry or unclear."""
+
+Rules:
+- Never invent plant identifications for non-plant images
+- If unsure whether it is a plant, set all probabilities below 0.3
+- Be conservative with probabilities"""
 
     resp = groq_client.chat.completions.create(
         model=VISION_MODEL,
-        temperature=0.2,
+        temperature=0.1,
         messages=[{"role": "user", "content": [
             {"type": "image_url", "image_url": {"url": f"data:{mimetype};base64,{b64}"}},
             {"type": "text", "text": prompt}
         ]}]
     )
-    data = clean_json(resp.choices[0].message.content)
-    if not data or not data.get('suggestions'):
+    raw = resp.choices[0].message.content
+    data = clean_json(raw)
+
+    if not data:
+        raise Exception("Groq vision returned no parseable response")
+
+    # Check if the model explicitly said it's not a plant
+    if data.get("not_a_plant"):
+        what = data.get("what_i_see", "a non-plant image")
+        raise ValueError(f"NOT_A_PLANT:{what}")
+
+    if not data.get("suggestions"):
         raise Exception("Groq vision returned no suggestions")
+
     return [{'plant_name': s['plant_name'], 'probability': float(s.get('probability', 0.5))} for s in data['suggestions']]
 
 # -------------------- Internal: Plant description (safety-gated) --------------------

@@ -513,7 +513,7 @@ main {
 .loader { width: 36px; height: 36px; border: 3px solid rgba(90,122,86,0.2); border-top-color: var(--moss); border-radius: 50%; animation: spin 0.8s linear infinite; }
 .loader-text { font-size: 13px; color: var(--text-lt); }
 
-.placeholder-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; text-align: center; color: var(--text-lt); }
+.placeholder-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 20px; text-align: center; color: var(--text-lt); }
 .placeholder-wrap svg { width: 40px; height: 40px; opacity: 0.3; margin-bottom: 10px; }
 .placeholder-wrap p { font-size: 13px; }
 
@@ -978,9 +978,12 @@ document.getElementById('identify-btn').addEventListener('click', async () => {
   try {
     const res  = await fetch('/identify', { method: 'POST', body: fd });
     const data = await res.json();
-    if (data.error) throw new Error(data.error);
+    if (data.error) {
+      showResultError(data.error, data.not_a_plant === true, data.what_detected);
+      return;
+    }
     renderResults(data);
-  } catch (e) { showResultError(e.message); }
+  } catch (e) { showResultError(e.message, false, null); }
 });
 
 function showLoader() {
@@ -1025,11 +1028,35 @@ function showLoader() {
   currentDangerLevel = 'safe';
 }
 
-function showResultError(msg) {
+function showResultError(msg, isNotPlant, whatDetected) {
   document.getElementById('result-loader').style.display      = 'none';
   document.getElementById('result-placeholder').style.display = 'flex';
-  document.getElementById('result-placeholder').innerHTML     = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:36px;height:36px;opacity:0.3;margin-bottom:10px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg><p style="color:#c0392b;font-size:13px">${msg}</p>`;
-  /* Also hide/reset all output sections on error */
+
+  if (isNotPlant) {
+    /* Special "not a plant" state with a friendly illustration */
+    document.getElementById('result-placeholder').innerHTML = `
+      <div style="text-align:center;max-width:260px">
+        <div style="width:64px;height:64px;border-radius:50%;background:rgba(212,136,42,0.12);border:2px solid rgba(212,136,42,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+          <svg fill="none" stroke="#d4882a" viewBox="0 0 24 24" style="width:28px;height:28px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:#7a5010;margin-bottom:6px">No Plant Detected</p>
+        ${whatDetected ? `<p style="font-size:12px;color:var(--text-lt);margin-bottom:8px">Detected: <em>${whatDetected}</em></p>` : ''}
+        <p style="font-size:12px;color:var(--text-lt);line-height:1.6">Please upload a clear photo of a <strong style="color:var(--sage)">plant, leaf, flower, herb,</strong> or botanical specimen.</p>
+        <div style="margin-top:12px;padding:8px 12px;background:rgba(90,122,86,0.08);border-radius:8px;font-size:11px;color:var(--sage);text-align:left">
+          <strong>Tips for best results:</strong><br>
+          • Photograph the plant close-up<br>
+          • Include leaves, flowers, or distinctive features<br>
+          • Use good lighting, avoid blur<br>
+          • Avoid background clutter
+        </div>
+      </div>`;
+  } else {
+    document.getElementById('result-placeholder').innerHTML = `
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:36px;height:36px;opacity:0.3;margin-bottom:10px"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      <p style="color:#c0392b;font-size:13px;max-width:220px;text-align:center">${msg}</p>`;
+  }
+
+  /* Reset all output sections */
   document.getElementById('remedies-section').style.display         = 'none';
   document.getElementById('remedies-grid').innerHTML                 = '';
   document.getElementById('remedies-blocked-notice').style.display  = 'none';
